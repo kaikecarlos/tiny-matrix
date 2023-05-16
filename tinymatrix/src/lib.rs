@@ -53,29 +53,54 @@ impl Matrix {
         }
     }
 
-    pub fn concat_rows(&mut self, row1: usize, row2: usize) {
-        assert!(row1 < self.rows && row2 < self.rows, "Invalid row indices!");
-        assert!(
-            self.cols > 1,
-            "Matrix needs at least two columns to be concatenated!"
-        );
-        let mut new_row = Vec::with_capacity(self.cols);
+    pub fn concat_rows(&self, other: &Self) -> Self {
+        if self.rows != other.rows {
+            panic!("Both matrices need to have the same amount of rows!");
+        } else {
+            let mut result: Vec<f64> = Vec::with_capacity(self.data.len() + other.data.len());
+            
+            for i in 0..self.rows { 
+                let s_index1 = i * self.cols;
+                let e_index1 = s_index1 + self.cols;
+                result.extend_from_slice(&self.data[s_index1..e_index1]);
 
-        let r1_start = row1 * self.cols;
-        let r1_end = row1 + self.cols;
+                let s_index2 = i * other.cols;
+                let e_index2 = s_index2 + other.cols;
+                result.extend_from_slice(&other.data[s_index2..e_index2]);
+            }
 
-        new_row.extend_from_slice(&self.data[r1_start..r1_end]);
-
-        let r2_start = row2 * self.cols;
-        let r2_end = row2 + self.cols;
-
-        new_row.extend_from_slice(&self.data[r2_start..r2_end]);
-
-        let insert_index = row1.min(row2);
-        let insert_start = insert_index * self.cols;
-        // self.data.insert(insert_start, new_row);
-        self.rows += 1;
+            Matrix {
+                rows: self.rows,
+                cols: self.cols * 2,
+                data: result
+            }
+        }
     }
+
+    pub fn concat_cols(&self, other: &Self) -> Self {
+        if self.cols != other.cols {
+            panic!("Both matrices needs to have the same amount of columns!");
+        } else {
+            let mut result: Vec<f64> = Vec::with_capacity(self.data.len() + other.data.len());
+            
+            for i in 0..self.rows {
+                for j in 0..self.cols {
+                    result.push(self.data[i * self.cols +j]);
+                }
+
+                for j in 0..other.cols {
+                    result.push(other.data[i * other.cols + j]);
+                }
+            }
+
+            Matrix {
+                rows: self.rows,
+                cols: self.cols + other.cols,
+                data: result
+            }
+        }
+    }
+
 
     pub fn transpose(&self) -> Self {
         let mut result = Matrix::new(self.cols, self.rows);
