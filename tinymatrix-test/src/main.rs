@@ -25,6 +25,16 @@ fn main() {
     println!("{:?}", a_diagonal);
     println!("{:?}", b_diagonal);
 
+    // Example of an upper triangular matrix (all elements below the main diagonal are zero)
+    let u_v = vec![
+        1.0, 2.0, 3.0,
+        0.0, -1.0, 10.0,
+        0.0, 0.0, 0.0
+    ];
+    let u_m = Matrix::from_vector(3, 3, u_v);
+    println!("{:?}", u_m.is_u_triangular());
+
+
     // Test joining cols and joining rows
     let v_test1 = vec![
         1.0, 2.0,

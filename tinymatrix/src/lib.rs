@@ -64,6 +64,44 @@ impl Matrix {
         }
     }
 
+    pub fn is_u_triangular(&self) -> bool {
+        if !self.is_squared() {
+            return false
+        } else {
+            let (_, _, b_diagonal) = self.main_diagonal();
+            let mut z = 0;
+            for i in 0..b_diagonal.len() {
+                if b_diagonal[i] == 0.0 {
+                    z += 1;
+                }
+            }
+            if z == b_diagonal.len() {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    pub fn is_l_triangular(&self) -> bool {
+        if !self.is_squared() {
+            return false
+        } else {
+            let (_, a_diagonal, _) = self.main_diagonal();
+            let mut z = 0;
+            for i in 0..a_diagonal.len() {
+                if a_diagonal[i] == 0.0 {
+                    z += 1;
+                }
+            }
+            if z == a_diagonal.len() {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     pub fn concat_rows(&self, other: &Self) -> Self {
         if self.rows != other.rows {
             panic!("Both matrices need to have the same amount of rows!");
