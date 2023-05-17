@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct Matrix {
     rows: usize,
     cols: usize,
@@ -66,7 +67,7 @@ impl Matrix {
 
     pub fn is_u_triangular(&self) -> bool {
         if !self.is_squared() {
-            return false
+            return false;
         } else {
             let (_, _, b_diagonal) = self.main_diagonal();
             let mut z = 0;
@@ -85,7 +86,7 @@ impl Matrix {
 
     pub fn is_l_triangular(&self) -> bool {
         if !self.is_squared() {
-            return false
+            return false;
         } else {
             let (_, a_diagonal, _) = self.main_diagonal();
             let mut z = 0;
@@ -102,14 +103,13 @@ impl Matrix {
         }
     }
 
-
     pub fn concat_rows(&self, other: &Self) -> Self {
         if self.rows != other.rows {
             panic!("Both matrices need to have the same amount of rows!");
         } else {
             let mut result: Vec<f64> = Vec::with_capacity(self.data.len() + other.data.len());
-            
-            for i in 0..self.rows { 
+
+            for i in 0..self.rows {
                 let s_index1 = i * self.cols;
                 let e_index1 = s_index1 + self.cols;
                 result.extend_from_slice(&self.data[s_index1..e_index1]);
@@ -122,7 +122,7 @@ impl Matrix {
             Matrix {
                 rows: self.rows,
                 cols: self.cols * 2,
-                data: result
+                data: result,
             }
         }
     }
@@ -132,10 +132,10 @@ impl Matrix {
             panic!("Both matrices needs to have the same amount of columns!");
         } else {
             let mut result: Vec<f64> = Vec::with_capacity(self.data.len() + other.data.len());
-            
+
             for i in 0..self.rows {
                 for j in 0..self.cols {
-                    result.push(self.data[i * self.cols +j]);
+                    result.push(self.data[i * self.cols + j]);
                 }
 
                 for j in 0..other.cols {
@@ -146,7 +146,7 @@ impl Matrix {
             Matrix {
                 rows: self.rows,
                 cols: self.cols + other.cols,
-                data: result
+                data: result,
             }
         }
     }
@@ -169,7 +169,20 @@ impl Matrix {
         unimplemented!("The determinant of a matrix");
     }
 
-    pub fn multiply(&self, other: &Self) -> Self {
+    pub fn print_matrix(&self) {
+        for i in 0..self.rows {
+            for j in 0..self.cols {
+                print!("{:.2} ", self.get(i, j))
+            }
+            println!();
+        }
+        println!();
+    }
+}
+
+impl std::ops::Mul<Matrix> for Matrix {
+    type Output = Matrix;
+    fn mul(self, other: Matrix) -> Self::Output {
         if self.cols != other.rows {
             panic!(
                 "The amount of columns needs to be equal to the amount of rows for multiplication!"
@@ -188,14 +201,50 @@ impl Matrix {
             result
         }
     }
+}
 
-    pub fn print_matrix(&self) {
-        for i in 0..self.rows {
-            for j in 0..self.cols {
-                print!("{:.2} ", self.get(i, j))
+impl std::ops::Add<Matrix> for Matrix {
+    type Output = Matrix;
+
+    fn add(self, other: Matrix) -> Self::Output {
+        if self.cols != other.rows {
+            panic!(
+                "The amount of columns needs to be equal to the amount of rows for multiplication!"
+            )
+        } else {
+            Matrix {
+                rows: self.rows,
+                cols: self.cols,
+                data: self
+                    .data
+                    .iter()
+                    .zip(other.data.iter())
+                    .map(|(&a, &b)| a + b)
+                    .collect(),
             }
-            println!();
         }
-        println!();
+    }
+}
+
+impl std::ops::Sub<Matrix> for Matrix {
+    type Output = Matrix;
+
+    fn sub(self, other: Matrix) -> Self::Output {
+        if self.cols != other.rows {
+            panic!(
+                "The amount of columns needs to be equal to the amount of rows for multiplication!"
+            )
+        } else {
+            Matrix {
+                rows: self.rows,
+                cols: self.cols,
+                data: self
+                    .data
+                    .iter()
+                    .zip(other.data.iter())
+                    .map(|(&a, &b)| a - b)
+                    .collect(),
+            }
+        }
     }
 }

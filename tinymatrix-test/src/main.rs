@@ -17,8 +17,7 @@ fn main() {
     let m2 = Matrix::from_vector(3, 3, vt2);
     m2.print_matrix();
 
-    let result = m1.multiply(&m2);
-    result.print_matrix();
+
 
     let (main_diagonal, a_diagonal, b_diagonal) = Matrix::main_diagonal(&m1);
     println!("{:?}", main_diagonal);
@@ -48,6 +47,16 @@ fn main() {
 
     let cm_test1 = Matrix::from_vector(2, 2, v_test1);
     let cm_test2 = Matrix::from_vector(2, 2, v_test2);
+
+    let result_sum = cm_test1.clone() + cm_test2.clone();
+    result_sum.print_matrix();
+
+    let result_sub = cm_test1.clone() - cm_test2.clone();
+    result_sub.print_matrix();
+
+    let result_mult = cm_test1.clone() * cm_test2.clone();
+    result_mult.print_matrix();
+
     let cm_new = cm_test1.concat_cols(&cm_test2);
     cm_new.print_matrix();
 
