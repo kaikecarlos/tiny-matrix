@@ -20,8 +20,10 @@ fn main() {
     let result = m1.multiply(&m2);
     result.print_matrix();
 
-    let main_diagonal = Matrix::main_diagonal(&m1);
-    print!("{:?}\n", main_diagonal);
+    let (main_diagonal, a_diagonal, b_diagonal) = Matrix::main_diagonal(&m1);
+    println!("{:?}", main_diagonal);
+    println!("{:?}", a_diagonal);
+    println!("{:?}", b_diagonal);
 
     // Test joining cols and joining rows
     let v_test1 = vec![

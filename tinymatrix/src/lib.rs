@@ -41,13 +41,24 @@ impl Matrix {
         }
     }
 
-    pub fn main_diagonal(&self) -> Vec<f64> {
+    pub fn main_diagonal(&self) -> (Vec<f64>, Vec<f64>, Vec<f64>) {
         if self.is_squared() {
-            let mut diagonal = vec![0.0; self.rows];
+            let mut m_diagonal: Vec<f64> = Vec::new();
+            let mut a_diagonal: Vec<f64> = Vec::new();
+            let mut b_diagonal: Vec<f64> = Vec::new();
+
             for i in 0..self.rows {
-                diagonal[i] = self.get(i, i);
+                for j in 0..self.cols {
+                    if i == j {
+                        m_diagonal.push(self.get(i, i));
+                    } else if i > j {
+                        b_diagonal.push(self.get(i, j));
+                    } else {
+                        a_diagonal.push(self.get(i, j));
+                    }
+                }
             }
-            diagonal
+            (m_diagonal, a_diagonal, b_diagonal)
         } else {
             panic!("The matrix needs to be squared!")
         }
