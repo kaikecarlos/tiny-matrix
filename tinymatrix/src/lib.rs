@@ -102,6 +102,7 @@ impl Matrix {
         }
     }
 
+
     pub fn concat_rows(&self, other: &Self) -> Self {
         if self.rows != other.rows {
             panic!("Both matrices need to have the same amount of rows!");
@@ -150,7 +151,6 @@ impl Matrix {
         }
     }
 
-
     pub fn transpose(&self) -> Self {
         let mut result = Matrix::new(self.cols, self.rows);
         for i in 0..self.rows {
@@ -159,6 +159,14 @@ impl Matrix {
             }
         }
         result
+    }
+
+    pub fn identity(&self) -> Self {
+        unimplemented!("Identity of a matrix");
+    }
+
+    pub fn determinant(&self) -> Self {
+        unimplemented!("The determinant of a matrix");
     }
 
     pub fn multiply(&self, other: &Self) -> Self {
