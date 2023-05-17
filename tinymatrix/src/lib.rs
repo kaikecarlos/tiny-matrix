@@ -162,13 +162,20 @@ impl Matrix {
     }
 
     pub fn identity(&self) -> Self {
-        unimplemented!("Identity of a matrix");
+        let mut result = Matrix::new(self.rows, self.cols);
+        for i in 0..self.rows {
+            result.data[i * self.rows + i] = 1.0;
+        }
+        result
     }
 
     pub fn determinant(&self) -> Self {
         unimplemented!("The determinant of a matrix");
     }
 
+    pub fn lu_decomposition(&self) -> Self {
+        unimplemented!("The LU decomposition of a matrix");   
+    }
     pub fn print_matrix(&self) {
         for i in 0..self.rows {
             for j in 0..self.cols {

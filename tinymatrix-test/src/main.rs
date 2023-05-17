@@ -57,6 +57,9 @@ fn main() {
     let result_mult = cm_test1.clone() * cm_test2.clone();
     result_mult.print_matrix();
 
+    let result_id = cm_test1.clone().identity();
+    result_id.print_matrix();
+
     let cm_new = cm_test1.concat_cols(&cm_test2);
     cm_new.print_matrix();
 
