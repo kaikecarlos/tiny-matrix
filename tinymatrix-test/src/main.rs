@@ -57,6 +57,13 @@ fn main() {
     let result_mult = cm_test1.clone() * cm_test2.clone();
     result_mult.print_matrix();
 
+    let result_mult_escalar = cm_test1.clone() * 2;
+    result_mult_escalar.print_matrix();
+
+    let result_div_escalar = cm_test1.clone() / 2;
+    result_div_escalar.print_matrix();
+
+
     let result_id = cm_test1.clone().identity();
     result_id.print_matrix();
 

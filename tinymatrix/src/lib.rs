@@ -210,6 +210,27 @@ impl std::ops::Mul<Matrix> for Matrix {
     }
 }
 
+impl std::ops::Mul<i32> for Matrix {
+    type Output = Matrix;
+    fn mul(mut self, other: i32) -> Self::Output {
+        for i in self.data.iter_mut() {
+            *i *= other as f64;
+        }
+        self
+    }
+}
+
+impl std::ops::Div<i32> for Matrix {
+    type Output = Matrix;
+    fn div(mut self, other: i32) -> Self::Output {
+        for i in self.data.iter_mut() {
+            *i /= other as f64;
+        }
+        self
+    }
+}
+
+
 impl std::ops::Add<Matrix> for Matrix {
     type Output = Matrix;
 
