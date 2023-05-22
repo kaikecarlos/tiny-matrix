@@ -6,6 +6,16 @@ pub struct Matrix {
 }
 
 impl Matrix {
+
+    /// Returns a new Matrix given the rows and columns. The matrix is full of 0's
+    /// # Arguments
+    /// * `rows` - The amount of rows of the matrix
+    /// * `cols` - The amount of columns of the matrix
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let matrix = Matrix::new(2, 2);
+    /// ```
     pub fn new(rows: usize, cols: usize) -> Self {
         Matrix {
             rows,
@@ -14,6 +24,20 @@ impl Matrix {
         }
     }
 
+    /// Returns a new Matrix given the rows, columns and all the data inside the matrix.
+    /// # Arguments
+    /// * `rows` - The amount of rows of the matrix
+    /// * `cols` - The amount of columns of the matrix
+    /// * `values` - The data that the Matrix is created from (needs to be an 1D Vector)
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let matrix = Matrix::from_vector(2, 2, vector);
+    /// ```
     pub fn from_vector(rows: usize, cols: usize, values: Vec<f64>) -> Self {
         if rows * cols != values.len() {
             panic!("The vector input needs to match with the amount of columns and rows!");
@@ -26,14 +50,58 @@ impl Matrix {
         }
     }
 
+    /// Returns the data given the coordinates (row and column)
+    /// # Arguments
+    /// * `row` - The row where the data is located
+    /// * `col` - The column where the data is located
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let matrix = Matrix::from_vector(2, 2, vector);
+    /// matrix.get(0, 0);
+    /// ```
+    /// # Returns
+    /// The value on that coordinate
     pub fn get(&self, row: usize, col: usize) -> f64 {
         self.data[row * self.cols + col]
     }
 
+    /// Sets a value given the coordinates (row and column) and the value
+    /// # Arguments
+    /// * `row` - The row where the data is located
+    /// * `col` - The column where the data is located
+    /// * `value` - The value that is being set.
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let mut matrix = Matrix::from_vector(2, 2, vector);
+    /// matrix.set(0, 0, 1.5);
+    /// ```
     pub fn set(&mut self, row: usize, col: usize, value: f64) {
         self.data[row * self.cols + col] = value;
     }
 
+    /// Returns if the matrix is squared (e.g the amount of columns is equal to the amount of rows)
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let matrix = Matrix::from_vector(2, 2, vector);
+    /// matrix.is_squared(); // Should return true
+    /// ```
+    /// # Returns
+    /// A boolean based on the result.
     pub fn is_squared(&self) -> bool {
         if self.cols == self.rows {
             return true;
@@ -41,7 +109,19 @@ impl Matrix {
             return false;
         }
     }
-
+    /// Returns the main diagonal, all items above and below the main diagonal of a Matrix (only if it's squared)
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let matrix = Matrix::from_vector(2, 2, vector);
+    /// let (main_diagonal, above_diagonal, below_diagonal) = matrix.main_diagonal();
+    /// ```
+    /// # Returns
+    /// The main diagonal, all numbers above the main diagoan and all numbers below the main diagonal. All diagonals are Vec<f64> (Vectors)
     pub fn main_diagonal(&self) -> (Vec<f64>, Vec<f64>, Vec<f64>) {
         if self.is_squared() {
             let mut m_diagonal: Vec<f64> = Vec::new();
@@ -65,6 +145,19 @@ impl Matrix {
         }
     }
 
+    /// Returns if the matrix is upper triangular (e.g the matrix is squared and all numbers below the main diagonal are zero)
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 2.0,
+    ///     0.0, 4.0
+    /// ];
+    /// let matrix = Matrix::from_vector(2, 2, vector);
+    /// matrix.is_u_triangular(); // Should return true
+    /// ```
+    /// # Returns
+    /// A boolean based on the result.
     pub fn is_u_triangular(&self) -> bool {
         if !self.is_squared() {
             return false;
@@ -84,6 +177,19 @@ impl Matrix {
         }
     }
 
+    /// Returns if the matrix is lower triangular (e.g the matrix is squared and all numbers above the main diagonal are zero)
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 0.0,
+    ///     1.0, 4.0
+    /// ];
+    /// let matrix = Matrix::from_vector(2, 2, vector);
+    /// matrix.is_l_triangular(); // Should return true
+    /// ```
+    /// # Returns
+    /// A boolean based on the result.
     pub fn is_l_triangular(&self) -> bool {
         if !self.is_squared() {
             return false;
@@ -103,6 +209,26 @@ impl Matrix {
         }
     }
 
+    /// Returns a new Matrix when given two matrices and both matrices have the same number of rows, join all rows 
+    /// # Arguments
+    /// * `other` - The matrix that is concatenating all rows.
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector1 = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let vector2 = vec![
+    ///     5.0, 6.0,
+    ///     7.0, 8.0
+    /// ];
+    /// let matrix1 = Matrix::from_vector(2, 2, vector1);
+    /// let matrix2 = Matrix::from_vector(2, 2, vector2);
+    /// let joined_rows = matrix1.concat_rows(&matrix2);
+    /// ```
+    /// # Returns
+    /// A new matrix with all rows joint.
     pub fn concat_rows(&self, other: &Self) -> Self {
         if self.rows != other.rows {
             panic!("Both matrices need to have the same amount of rows!");
@@ -127,6 +253,26 @@ impl Matrix {
         }
     }
 
+    /// Returns a new Matrix when given two matrices and they have the same amount of columns, join all columns 
+    /// # Arguments
+    /// * `other` - The matrix that is concatenating all columns.
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector1 = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let vector2 = vec![
+    ///     5.0, 6.0,
+    ///     7.0, 8.0
+    /// ];
+    /// let matrix1 = Matrix::from_vector(2, 2, vector1);
+    /// let matrix2 = Matrix::from_vector(2, 2, vector2);
+    /// let joined_rows = matrix1.concat_cols(&matrix2);
+    /// ```
+    /// # Returns
+    /// A new matrix with all columns joint.
     pub fn concat_cols(&self, other: &Self) -> Self {
         if self.cols != other.cols {
             panic!("Both matrices needs to have the same amount of columns!");
@@ -160,7 +306,19 @@ impl Matrix {
         }
         result
     }
-
+    /// Returns the identity matrix of a matrix. 
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let matrix = Matrix::from_vector(2, 2, vector);
+    /// let identity = matrix.identity();
+    /// ```
+    /// # Returns
+    /// A new matrix with all the main diagonal 1 and all the other elements zero.
     pub fn identity(&self) -> Self {
         let mut result = Matrix::new(self.rows, self.cols);
         for i in 0..self.rows {
@@ -176,6 +334,18 @@ impl Matrix {
     pub fn lu_decomposition(&self) -> Self {
         unimplemented!("The LU decomposition of a matrix");   
     }
+
+    /// Prints the matrix in a nice way. Useful for debugging.
+    /// # Examples
+    /// ```
+    /// use tinymatrix::Matrix;
+    /// let vector = vec![
+    ///     1.0, 2.0,
+    ///     3.0, 4.0
+    /// ];
+    /// let matrix = Matrix::from_vector(2, 2, vector);
+    /// matrix.print_matrix();
+    /// ```
     pub fn print_matrix(&self) {
         for i in 0..self.rows {
             for j in 0..self.cols {
